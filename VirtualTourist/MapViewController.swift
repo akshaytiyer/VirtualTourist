@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, UIGestureRecognizerDelegate {
 
     //MARK: Properties
     var mapViewInEditState = false
@@ -48,6 +48,14 @@ class MapViewController: UIViewController {
         }
     }
     
+    override func viewDidLoad() {
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotation(_:)))
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        self.mapView.addGestureRecognizer(lpgr)
+    }
+    
     //Set the new constraints for the map view
     func setNewMapViewConstraints() {
         self.mapViewBottomConstraint.constant += self.deleteLabel.frame.height
@@ -57,6 +65,16 @@ class MapViewController: UIViewController {
     func setMapViewConstraintsNormal() {
         self.mapViewBottomConstraint.constant -= self.deleteLabel.frame.height
     }
-
+    
+    func addAnnotation(gestureRecognizer:UIGestureRecognizer){
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = gestureRecognizer.locationInView(mapView)
+            let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = newCoordinates
+            self.mapView.addAnnotation(annotation)
+                        //places.append(["name":annotation.title,"latitude":"\(newCoordinates.latitude)","longitude":"\(newCoordinates.longitude)"])
+        }
+    }
 }
 
