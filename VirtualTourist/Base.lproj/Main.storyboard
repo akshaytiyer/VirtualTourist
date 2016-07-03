@@ -1,26 +1,98 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GYj-MA-ybf">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Navigation Controller-->
+        <scene sceneID="SBO-CN-08r">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="GYj-MA-ybf" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IRq-0l-KfE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="hbf-2f-nah" kind="relationship" relationship="rootViewController" id="bW6-ey-Gzz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fMH-0h-pNo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-720" y="59"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="Th7-aQ-JZV">
+            <objects>
+                <viewController id="hbf-2f-nah" customClass="MapViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                        <viewControllerLayoutGuide type="top" id="JN2-Uo-WCe"/>
+                        <viewControllerLayoutGuide type="bottom" id="mlr-nt-KxO"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="OC0-lc-7Ym">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins To Delete" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erV-Wd-6yQ">
+                                <rect key="frame" x="0.0" y="607" width="374" height="60"/>
+                                <color key="backgroundColor" red="0.91848958329999997" green="0.1378003052" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Zma-wi-VPj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="52p-b7-oWD">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="erV-Wd-6yQ" secondAttribute="trailing" constant="1" id="SDz-b6-ePb"/>
+                            <constraint firstAttribute="bottom" secondItem="52p-b7-oWD" secondAttribute="bottom" id="ZDa-DO-WK0"/>
+                            <constraint firstAttribute="bottom" secondItem="erV-Wd-6yQ" secondAttribute="bottom" id="jPQ-sK-MmB"/>
+                            <constraint firstAttribute="trailing" secondItem="52p-b7-oWD" secondAttribute="trailing" id="l23-Fh-a4c"/>
+                            <constraint firstItem="erV-Wd-6yQ" firstAttribute="leading" secondItem="OC0-lc-7Ym" secondAttribute="leading" id="ml2-7s-SK3"/>
+                            <constraint firstItem="52p-b7-oWD" firstAttribute="top" secondItem="OC0-lc-7Ym" secondAttribute="top" constant="64" id="t0d-xJ-U1f"/>
+                            <constraint firstItem="52p-b7-oWD" firstAttribute="leading" secondItem="OC0-lc-7Ym" secondAttribute="leading" id="z1g-Xy-tPG"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="6ef-rK-OQN">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="pE4-8n-m9G">
+                            <connections>
+                                <action selector="editMapViewConstraints:" destination="hbf-2f-nah" id="HZ5-xd-B8c"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="deleteLabel" destination="erV-Wd-6yQ" id="a3n-Mn-3W2"/>
+                        <outlet property="mapView" destination="52p-b7-oWD" id="2iW-uV-ptQ"/>
+                        <outlet property="mapViewBottomConstraint" destination="ZDa-DO-WK0" id="WcA-i1-nLV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O9w-oF-4Eg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-232.5" y="58.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="nig-uR-HBH">
+            <objects>
+                <viewController id="yx9-jO-qwZ" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pmB-I2-ewU"/>
+                        <viewControllerLayoutGuide type="bottom" id="opI-8u-D6a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Rr9-EE-A57">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8NJ-Fy-xmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="698" y="59"/>
         </scene>
     </scenes>
 </document>
