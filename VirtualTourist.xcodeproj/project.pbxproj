@@ -99,6 +99,7 @@
 		5EFD8E101D29B314004EA812 /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				5EFD8E441D29CF8F004EA812 /* Model */,
 				5EFD8E431D29BE8D004EA812 /* Controller */,
 				5EFD8E111D29B314004EA812 /* AppDelegate.swift */,
 				5EFD8E151D29B314004EA812 /* Main.storyboard */,
@@ -134,6 +135,13 @@
 				5EFD8E411D29BE82004EA812 /* MapDetailViewController.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		5EFD8E441D29CF8F004EA812 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

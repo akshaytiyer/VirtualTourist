@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, UIGestureRecognizerDelegate {
+class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapViewDelegate {
 
     //MARK: Properties
     var mapViewInEditState = false
@@ -23,6 +23,8 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func editMapViewConstraints(sender: AnyObject) {
         animateMapViewConstraintChange()
     }
+    
+    let annotation = MKPointAnnotation()
     
     //MARK: Helper Method to change state of navigation bar
     func animateMapViewConstraintChange(){
@@ -49,11 +51,13 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     override func viewDidLoad() {
-        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotation(_:)))
-        lpgr.minimumPressDuration = 0.5
-        lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self
-        self.mapView.addGestureRecognizer(lpgr)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotation(_:)))
+        longPress.minimumPressDuration = 2.0
+        self.mapView.addGestureRecognizer(longPress)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(MapViewController.removeAnnotation(_:)))
+        tap.numberOfTapsRequired = 1
+        self.mapView.addGestureRecognizer(tap)
     }
     
     //Set the new constraints for the map view
@@ -66,14 +70,23 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
         self.mapViewBottomConstraint.constant -= self.deleteLabel.frame.height
     }
     
+    func removeAnnotation(gesture: UIGestureRecognizer) {
+        
+        if (mapViewInEditState) {
+            if gesture.state == UIGestureRecognizerState.Ended {
+                self.mapView.removeAnnotation(annotation)
+                print("Annotation Removed")
+            }
+        }
+        
+    }
+    
     func addAnnotation(gestureRecognizer:UIGestureRecognizer){
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let annotation = MKPointAnnotation()
             annotation.coordinate = newCoordinates
             self.mapView.addAnnotation(annotation)
-                        //places.append(["name":annotation.title,"latitude":"\(newCoordinates.latitude)","longitude":"\(newCoordinates.longitude)"])
         }
     }
 }
