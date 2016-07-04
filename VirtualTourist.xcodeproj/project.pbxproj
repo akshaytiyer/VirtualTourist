@@ -15,6 +15,22 @@
 		5EFD8E321D29B315004EA812 /* VirtualTouristUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E311D29B315004EA812 /* VirtualTouristUITests.swift */; };
 		5EFD8E401D29BE79004EA812 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E3F1D29BE79004EA812 /* MapViewController.swift */; };
 		5EFD8E421D29BE82004EA812 /* MapDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E411D29BE82004EA812 /* MapDetailViewController.swift */; };
+		5EFD8E471D29D882004EA812 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E451D29D882004EA812 /* VirtualTourist.xcdatamodeld */; };
+		5EFD8E491D29E24E004EA812 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E481D29E24E004EA812 /* CoreDataStack.swift */; };
+		5EFD8E4A1D29E24E004EA812 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E481D29E24E004EA812 /* CoreDataStack.swift */; };
+		5EFD8E4B1D29E24E004EA812 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E481D29E24E004EA812 /* CoreDataStack.swift */; };
+		5EFD8E501D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4C1D29E272004EA812 /* Pin+CoreDataProperties.swift */; };
+		5EFD8E511D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4C1D29E272004EA812 /* Pin+CoreDataProperties.swift */; };
+		5EFD8E521D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4C1D29E272004EA812 /* Pin+CoreDataProperties.swift */; };
+		5EFD8E531D29E272004EA812 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4D1D29E272004EA812 /* Pin.swift */; };
+		5EFD8E541D29E272004EA812 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4D1D29E272004EA812 /* Pin.swift */; };
+		5EFD8E551D29E272004EA812 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4D1D29E272004EA812 /* Pin.swift */; };
+		5EFD8E561D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4E1D29E272004EA812 /* Image+CoreDataProperties.swift */; };
+		5EFD8E571D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4E1D29E272004EA812 /* Image+CoreDataProperties.swift */; };
+		5EFD8E581D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4E1D29E272004EA812 /* Image+CoreDataProperties.swift */; };
+		5EFD8E591D29E272004EA812 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4F1D29E272004EA812 /* Image.swift */; };
+		5EFD8E5A1D29E272004EA812 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4F1D29E272004EA812 /* Image.swift */; };
+		5EFD8E5B1D29E272004EA812 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFD8E4F1D29E272004EA812 /* Image.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +65,12 @@
 		5EFD8E331D29B315004EA812 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EFD8E3F1D29BE79004EA812 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		5EFD8E411D29BE82004EA812 /* MapDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapDetailViewController.swift; sourceTree = "<group>"; };
+		5EFD8E461D29D882004EA812 /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
+		5EFD8E481D29E24E004EA812 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		5EFD8E4C1D29E272004EA812 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5EFD8E4D1D29E272004EA812 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pin.swift; path = ../Pin.swift; sourceTree = "<group>"; };
+		5EFD8E4E1D29E272004EA812 /* Image+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Image+CoreDataProperties.swift"; path = "../Image+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5EFD8E4F1D29E272004EA812 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = ../Image.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +162,12 @@
 		5EFD8E441D29CF8F004EA812 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5EFD8E481D29E24E004EA812 /* CoreDataStack.swift */,
+				5EFD8E4C1D29E272004EA812 /* Pin+CoreDataProperties.swift */,
+				5EFD8E4D1D29E272004EA812 /* Pin.swift */,
+				5EFD8E4E1D29E272004EA812 /* Image+CoreDataProperties.swift */,
+				5EFD8E4F1D29E272004EA812 /* Image.swift */,
+				5EFD8E451D29D882004EA812 /* VirtualTourist.xcdatamodeld */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -278,9 +306,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EFD8E531D29E272004EA812 /* Pin.swift in Sources */,
+				5EFD8E591D29E272004EA812 /* Image.swift in Sources */,
+				5EFD8E491D29E24E004EA812 /* CoreDataStack.swift in Sources */,
+				5EFD8E501D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */,
+				5EFD8E471D29D882004EA812 /* VirtualTourist.xcdatamodeld in Sources */,
 				5EFD8E121D29B314004EA812 /* AppDelegate.swift in Sources */,
 				5EFD8E401D29BE79004EA812 /* MapViewController.swift in Sources */,
 				5EFD8E421D29BE82004EA812 /* MapDetailViewController.swift in Sources */,
+				5EFD8E561D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +323,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EFD8E271D29B314004EA812 /* VirtualTouristTests.swift in Sources */,
+				5EFD8E5A1D29E272004EA812 /* Image.swift in Sources */,
+				5EFD8E571D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */,
+				5EFD8E511D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */,
+				5EFD8E4A1D29E24E004EA812 /* CoreDataStack.swift in Sources */,
+				5EFD8E541D29E272004EA812 /* Pin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +336,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EFD8E321D29B315004EA812 /* VirtualTouristUITests.swift in Sources */,
+				5EFD8E5B1D29E272004EA812 /* Image.swift in Sources */,
+				5EFD8E581D29E272004EA812 /* Image+CoreDataProperties.swift in Sources */,
+				5EFD8E521D29E272004EA812 /* Pin+CoreDataProperties.swift in Sources */,
+				5EFD8E4B1D29E24E004EA812 /* CoreDataStack.swift in Sources */,
+				5EFD8E551D29E272004EA812 /* Pin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +576,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5EFD8E451D29D882004EA812 /* VirtualTourist.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5EFD8E461D29D882004EA812 /* VirtualTourist.xcdatamodel */,
+			);
+			currentVersion = 5EFD8E461D29D882004EA812 /* VirtualTourist.xcdatamodel */;
+			path = VirtualTourist.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5EFD8E061D29B314004EA812 /* Project object */;
 }
