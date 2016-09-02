@@ -8,11 +8,16 @@
 
 import UIKit
 import MapKit
+import CoreData
 
-class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapViewDelegate {
+class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate {
 
     //MARK: Properties
     var mapViewInEditState = false
+    var annotations = [MKPointAnnotation]()
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }
     
     //MARK: Outlets
     @IBOutlet var mapView: MKMapView!
@@ -24,7 +29,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapVie
         animateMapViewConstraintChange()
     }
     
-    let annotation = MKPointAnnotation()
+    
     
     //MARK: Helper Method to change state of navigation bar
     func animateMapViewConstraintChange(){
@@ -52,14 +57,11 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapVie
     
     override func viewDidLoad() {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotation(_:)))
-        longPress.minimumPressDuration = 2.0
+        longPress.minimumPressDuration = 1.0
         self.mapView.addGestureRecognizer(longPress)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(MapViewController.removeAnnotation(_:)))
-        tap.numberOfTapsRequired = 1
-        self.mapView.addGestureRecognizer(tap)
+        self.mapView.delegate = self
     }
-    
+
     //Set the new constraints for the map view
     func setNewMapViewConstraints() {
         self.mapViewBottomConstraint.constant += self.deleteLabel.frame.height
@@ -69,22 +71,23 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapVie
     func setMapViewConstraintsNormal() {
         self.mapViewBottomConstraint.constant -= self.deleteLabel.frame.height
     }
-    
-    func removeAnnotation(gesture: UIGestureRecognizer) {
-        
+
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        let selected = view.annotation as! MKPointAnnotation
+        self.annotations.append(selected)
         if (mapViewInEditState) {
-            if gesture.state == UIGestureRecognizerState.Ended {
-                self.mapView.removeAnnotation(annotation)
-                print("Annotation Removed")
-            }
+            self.mapView.removeAnnotation(selected)
+            print("Annotation Removed")
         }
-        
     }
     
     func addAnnotation(gestureRecognizer:UIGestureRecognizer){
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
+            let annotation = MKPointAnnotation()
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+            let lastPin = Pin(latitude: NSDecimalNumber(double: newCoordinates.latitude), longitude: NSDecimalNumber(double: newCoordinates.longitude), insertIntoManagedObjectContext: sharedContext)
+            print("Successfully saved data \(lastPin)")
             annotation.coordinate = newCoordinates
             self.mapView.addAnnotation(annotation)
         }

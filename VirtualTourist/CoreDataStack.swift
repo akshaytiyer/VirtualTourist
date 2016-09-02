@@ -1,121 +1,48 @@
 //
 //  CoreDataStack.swift
+//  VirtualTourist
 //
-//
-//  Created by Akshay Iyer on 7/3/16.
+//  Created by Akshay Iyer on 9/2/16.
 //  Copyright © 2016 akshaytiyer. All rights reserved.
 //
 
+import Foundation
 import CoreData
 
-struct CoreDataStack {
+public typealias ChildManagedObjectContext = NSManagedObjectContext
+
+public final class CoreDataStack:CustomStringConvertible {
     
-    // MARK:  - Properties
-    private let model : NSManagedObjectModel
-    private let coordinator : NSPersistentStoreCoordinator
-    private let modelURL : NSURL
-    private let dbURL : NSURL
-    let context : NSManagedObjectContext
+    public let model:CoreDataModel
+    public let managedObjectContext:NSManagedObjectContext
+    public let persistentStoreCoordinator:NSPersistentStoreCoordinator
     
-    // MARK:  - Initializers
-    init?(modelName: String){
+    public init(model:CoreDataModel, storeType:String = NSSQLiteStoreType, options:[NSObject:AnyObject]? = [NSMigratePersistentStoresAutomaticallyOption:true, NSInferMappingModelAutomaticallyOption:true], concurrencyType: NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType) {
         
-        // Assumes the model is in the main bundle
-        guard let modelURL = NSBundle.mainBundle().URLForResource(modelName, withExtension: "momd") else {
-            print("Unable to find \(modelName)in the main bundle")
-            return nil}
-        
-        self.modelURL = modelURL
-        
-        // Try to create the model from the URL
-        guard let model = NSManagedObjectModel(contentsOfURL: modelURL) else{
-            print("unable to create a model from \(modelURL)")
-            return nil
-        }
         self.model = model
+        self.persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model.managedObjectModel)
         
+        let modelStoreURL:NSURL? = (storeType == NSInMemoryStoreType) ? nil : model.storeURL
         
-        
-        // Create the store coordinator
-        coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-        
-        // create a context and add connect it to the coordinator
-        context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-        context.persistentStoreCoordinator = coordinator
-        
-        
-        
-        // Add a SQLite store located in the documents folder
-        let fm = NSFileManager.defaultManager()
-        
-        guard let  docUrl = fm.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else{
-            print("Unable to reach the documents folder")
-            return nil
+        do {
+            try self.persistentStoreCoordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: modelStoreURL, options: options)
+        } catch _ {
         }
-        
-        self.dbURL = docUrl.URLByAppendingPathComponent("model.sqlite")
-        
-
-        do{
-            try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
-            
-        }catch{
-            print("unable to add store at \(dbURL)")
-        }
-        
-        
-        
-        
-        
+        self.managedObjectContext = NSManagedObjectContext(concurrencyType: concurrencyType)
+        self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
     }
     
-    // MARK:  - Utils
-    func addStoreCoordinator(storeType: String,
-                             configuration: String?,
-                             storeURL: NSURL,
-                             options : [NSObject : AnyObject]?) throws{
+    public func childManagedObjectContext(concurrencyType:NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType, mergePolicyType:NSMergePolicyType = .MergeByPropertyObjectTrumpMergePolicyType) -> ChildManagedObjectContext {
         
-        try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: dbURL, options: nil)
-        
+        let childContext = NSManagedObjectContext(concurrencyType: concurrencyType)
+        childContext.parentContext = managedObjectContext
+        childContext.mergePolicy = NSMergePolicy(mergeType: mergePolicyType)
+        return childContext
     }
-}
-
-
-// MARK:  - Removing data
-extension CoreDataStack  {
     
-    func dropAllData() throws{
-        // delete all the objects in the db. This won't delete the files, it will
-        // just leave empty tables.
-        try coordinator.destroyPersistentStoreAtURL(dbURL, withType:NSSQLiteStoreType , options: nil)
-        
-        try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
-
-        
-    }
-}
-
-// MARK:  - Save
-extension CoreDataStack {
-    
-    func saveContext() throws{
-        if context.hasChanges {
-            try context.save()
+    public var description: String {
+        get {
+            return "<\(String(CoreDataStack.self)): model=\(model)>"
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

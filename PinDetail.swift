@@ -1,5 +1,5 @@
 //
-//  Image.swift
+//  PinDetail.swift
 //  VirtualTourist
 //
 //  Created by Akshay Iyer on 9/2/16.
@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-public class Image: NSManagedObject {
+public class PinDetail: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
 
