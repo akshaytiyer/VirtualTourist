@@ -11,13 +11,13 @@ import CoreData
 
 let FLICKR_API_KEY = "8c97222cbce046fd94f0c1a6fc17a022"
 
-public class FlickrClient: NSObject, HTTPClientProtocol {
+public class FlickrClient: NSObject, FlickrHTTPClientProtocol {
     
-    var httpClient:HTTPClient?
+    var httpClient:FlickrHTTPClient?
     
     override init() {
         super.init()
-        self.httpClient = HTTPClient(delegate: self)
+        self.httpClient = FlickrHTTPClient(delegate: self)
     }
     
     public func getBaseURLSecure() -> String {

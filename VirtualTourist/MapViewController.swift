@@ -10,87 +10,218 @@ import UIKit
 import MapKit
 import CoreData
 
-class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate {
-
-    //MARK: Properties
-    var mapViewInEditState = false
-    var annotations = [MKPointAnnotation]()
-    var sharedContext: NSManagedObjectContext {
-        return CoreDataStackManager.sharedInstance().managedObjectContext
-    }
+class MapViewController: UIViewController, UIGestureRecognizerDelegate, NSFetchedResultsControllerDelegate {
     
-    //MARK: Outlets
-    @IBOutlet var mapView: MKMapView!
-    @IBOutlet var deleteLabel: UILabel!
-    @IBOutlet var mapViewBottomConstraint: NSLayoutConstraint!
+    //MARK: - LifeCycle
     
-    //MARK: Edit Action
-    @IBAction func editMapViewConstraints(sender: AnyObject) {
-        animateMapViewConstraintChange()
-    }
-    
-    
-    
-    //MARK: Helper Method to change state of navigation bar
-    func animateMapViewConstraintChange(){
-        if (!mapViewInEditState) {
-            // slide up
-            mapViewInEditState = true
-            navigationItem.rightBarButtonItem?.title = "Done"
-            navigationItem.rightBarButtonItem?.style = .Done
-            setNewMapViewConstraints()
-            UIView.animateWithDuration(0.07) {
-                self.view.layoutIfNeeded()
-            }
-            
-        } else {
-            // slide down
-            mapViewInEditState = false
-            navigationItem.rightBarButtonItem?.title = "Edit"
-            navigationItem.rightBarButtonItem?.style = .Plain
-            setMapViewConstraintsNormal()
-            UIView.animateWithDuration(0.07) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
+    @IBOutlet weak var mapViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var deleteViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var deleteView: UIView!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var mapView: MKMapView!
+    var longPressRecognizer:UILongPressGestureRecognizer!
+    var currentAnnotation:MapPinAnnotation? = nil
+    var selectedPin:MapPinAnnotation? = nil
+    var editMode:Bool = false
     
     override func viewDidLoad() {
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotation(_:)))
-        longPress.minimumPressDuration = 1.0
-        self.mapView.addGestureRecognizer(longPress)
+        super.viewDidLoad()
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
+        
+        self.mapView.addGestureRecognizer(longPressRecognizer)
         self.mapView.delegate = self
-    }
-
-    //Set the new constraints for the map view
-    func setNewMapViewConstraints() {
-        self.mapViewBottomConstraint.constant += self.deleteLabel.frame.height
+        
+        do {
+            try self.fetchedResutlsController.performFetch()
+        } catch _ {
+        }
+        self.fetchedResutlsController.delegate = self
+        if let fetched = self.fetchedResutlsController.fetchedObjects as? [Pin] {
+            for annotation in fetched {
+                let toAdd = MapPinAnnotation(lattitude: annotation.lattitude as Double, longitude: annotation.longitude as Double)
+                toAdd.location = annotation
+                self.mapView.addAnnotation(toAdd)
+            }
+        }
+        self.updateConstrainstsForMode()
     }
     
-    //Set the map view to the old constraints
-    func setMapViewConstraintsNormal() {
-        self.mapViewBottomConstraint.constant -= self.deleteLabel.frame.height
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.selectedPin = nil
     }
-
-    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        let selected = view.annotation as! MKPointAnnotation
-        self.annotations.append(selected)
-        if (mapViewInEditState) {
-            self.mapView.removeAnnotation(selected)
-            print("Annotation Removed")
+    
+    //MARK: - CoreData
+    
+    lazy var fetchedResutlsController:NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lattitude", ascending: true)]
+        
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
+    var sharedContext:NSManagedObjectContext {
+        return CoreDataStackManager.sharedInstance().dataStack.managedObjectContext
+    }
+    
+    //MARK: - NSFetchedResultsControllerDelegate
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch(type) {
+        case NSFetchedResultsChangeType.Insert :
+            if let location:Pin = anObject as? Pin {
+                let annotation = MapPinAnnotation(lattitude: location.lattitude as Double, longitude: location.longitude as Double)
+                annotation.location = location
+                self.mapView.removeAnnotation(annotation)
+                self.mapView.addAnnotation(annotation)
+            }
+            break
+        case NSFetchedResultsChangeType.Delete :
+            if let location:Pin = anObject as? Pin {
+                for annotation in self.mapView.annotations {
+                    if let pin:MapPinAnnotation = annotation as? MapPinAnnotation {
+                        if pin.coordinate.latitude == location.lattitude && pin.coordinate.longitude == location.longitude {
+                            self.mapView.removeAnnotation(pin)
+                        }
+                    }
+                }
+            }
+            break
+        default:
+            break
         }
     }
     
-    func addAnnotation(gestureRecognizer:UIGestureRecognizer){
-        if gestureRecognizer.state == UIGestureRecognizerState.Began {
-            let touchPoint = gestureRecognizer.locationInView(mapView)
-            let annotation = MKPointAnnotation()
-            let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let lastPin = Pin(latitude: NSDecimalNumber(double: newCoordinates.latitude), longitude: NSDecimalNumber(double: newCoordinates.longitude), insertIntoManagedObjectContext: sharedContext)
-            print("Successfully saved data \(lastPin)")
-            annotation.coordinate = newCoordinates
-            self.mapView.addAnnotation(annotation)
+    func createLocationDetail() {
+        dispatch_async(dispatch_get_main_queue()) {
+            let coordinate = self.currentAnnotation!.coordinate
+            let location = Pin(lattitude: coordinate.latitude, longitude: coordinate.longitude, context: self.sharedContext)
+            CoreDataStackManager.sharedInstance().saveContext()
+            self.currentAnnotation!.location = location
+            FlickrPhotoDelegate.sharedInstance().searchPhotos(location)
+            let clocation = CLLocation(latitude: self.currentAnnotation!.coordinate.latitude, longitude: self.currentAnnotation!.coordinate.longitude)
+            CLGeocoder().reverseGeocodeLocation(clocation) { placemarks, error in
+                if error != nil {
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    return
+                }
+                
+                if placemarks!.count > 0 {
+                    let pm = placemarks![0]
+                    
+                    if pm.locality != nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            _ = PinDetail(location: location, locality: pm.locality!, context: self.sharedContext)
+                            CoreDataStackManager.sharedInstance().saveContext()
+                        }
+                    }
+                }
+            }
+            self.currentAnnotation = nil
+        }
+    }
+    
+    func createPinAnnotation(recognizer:UIGestureRecognizer) {
+        let touchPoint = recognizer.locationInView(self.mapView)
+        let touchMapCoordinate = self.mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
+        
+        self.currentAnnotation = MapPinAnnotation(lattitude: touchMapCoordinate.latitude, longitude: touchMapCoordinate.longitude)
+        self.mapView.addAnnotation(self.currentAnnotation!)
+    }
+    
+    func changePinLocationForDrag(recognizer:UIGestureRecognizer) {
+        let touchPoint = recognizer.locationInView(self.mapView)
+        let touchMapCoordinate = self.mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
+        
+        self.mapView.removeAnnotation(self.currentAnnotation!)
+        self.currentAnnotation?.coordinate = touchMapCoordinate
+        self.mapView.addAnnotation(self.currentAnnotation!)
+    }
+    
+    //MARK: - Controller
+    
+    func handleLongPress(recognizer:UIGestureRecognizer) {
+        if (recognizer.state == UIGestureRecognizerState.Ended) {
+            if self.editMode {
+                return
+            }
+            self.createLocationDetail()
+            return
+        } else if (recognizer.state == UIGestureRecognizerState.Changed) {
+            self.changePinLocationForDrag(recognizer)
+        } else {
+            self.createPinAnnotation(recognizer)
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "DetailView" {
+            if let viewController = segue.destinationViewController as? MapDetailViewController {
+                viewController.annotation = self.selectedPin
+            }
+        }
+    }
+    
+    @IBAction func onEdit(sender: UIBarButtonItem) {
+        if self.editMode {
+            self.editButton.title = "Edit"
+        } else {
+            self.editButton.title = "Done"
+        }
+        self.editMode = !self.editMode
+        
+        self.view.layoutIfNeeded()
+        UIView.animateWithDuration(1.0, animations: {
+            self.updateConstrainstsForMode()
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    func updateConstrainstsForMode () {
+        if self.editMode {
+            self.deleteViewTopConstraint.constant = -71
+            self.mapViewBottomConstraint.constant = 0
+            self.mapViewBottomConstraint.priority = 750+1
+        } else {
+            self.deleteViewTopConstraint.constant = 0
+            self.mapViewBottomConstraint.constant = -71
+            self.mapViewBottomConstraint.priority = 750-1
         }
     }
 }
 
+extension MapViewController : MKMapViewDelegate {
+    
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        if let annotation = annotation as? MapPinAnnotation {
+            let identifier = "Pin"
+            var view:MKPinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            } else {
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            
+            return view
+        }
+        return nil
+    }
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        if self.editMode {
+            if let pinAnnotation = view as? MKPinAnnotationView {
+                let annotation = pinAnnotation.annotation as! MapPinAnnotation
+                //do not allow delete while fetching photos
+                if !annotation.location!.isDownloading() {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.sharedContext.deleteObject(annotation.location!)
+                        CoreDataStackManager.sharedInstance().saveContext()
+                    }
+                }
+            }
+        } else {
+            self.selectedPin = view.annotation as? MapPinAnnotation
+            self.performSegueWithIdentifier("DetailView", sender: self)
+        }
+    }
+}

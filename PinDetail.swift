@@ -8,10 +8,23 @@
 
 import Foundation
 import CoreData
+import MapKit
 
+@objc(PinDetail)
 
 public class PinDetail: NSManagedObject {
-
-// Insert code here to add functionality to your managed object subclass
-
+    
+    @NSManaged var locality:String
+    @NSManaged var location:Pin
+    
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    convenience init(location:Pin, locality:String, context:NSManagedObjectContext) {
+        self.init(context: context)
+        
+        self.locality = locality
+        self.location = location
+    }
 }
