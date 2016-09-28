@@ -170,7 +170,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, NSFetche
         self.editMode = !self.editMode
         
         self.view.layoutIfNeeded()
-        UIView.animateWithDuration(1.0, animations: {
+        UIView.animateWithDuration(0.25, animations: {
             self.updateConstrainstsForMode()
             self.view.layoutIfNeeded()
         })
