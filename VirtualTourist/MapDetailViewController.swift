@@ -148,7 +148,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
             photo.internalimage = nil
             self.sharedContext.deleteObject(photo)
         }
-        self.searchPhotosForLocation()
+            self.searchPhotosForLocation()
         CoreDataStackManager.sharedInstance().saveContext()
         
     }

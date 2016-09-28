@@ -33,9 +33,9 @@ public class PhotoDownloadWorker:NSOperation, NSURLSessionDataDelegate {
         
         PendingPhotoDownloads.sharedInstance().downloadsInProgress[self.image.description.hashValue] = self
         
-        objc_sync_enter( PendingPhotoDownloads.sharedInstance().downloadWorkers)
+        objc_sync_enter(PendingPhotoDownloads.sharedInstance().downloadWorkers)
         PendingPhotoDownloads.sharedInstance().downloadWorkers.insert(self)
-        objc_sync_exit( PendingPhotoDownloads.sharedInstance().downloadWorkers)
+        objc_sync_exit(PendingPhotoDownloads.sharedInstance().downloadWorkers)
         
         if PendingPhotoDownloads.sharedInstance().downloadWorkers.count <= PendingPhotoDownloads.sharedInstance().downloadQueue.maxConcurrentOperationCount {
             PendingPhotoDownloads.sharedInstance().downloadQueue.addOperation(self)
