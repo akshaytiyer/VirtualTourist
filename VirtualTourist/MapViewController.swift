@@ -178,8 +178,8 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, NSFetche
     
     func updateConstrainstsForMode () {
         if self.editMode {
-            self.deleteViewTopConstraint.constant = -71
-            self.mapViewBottomConstraint.constant = 0
+            self.deleteViewTopConstraint.constant = -67
+            self.mapViewBottomConstraint.constant = +67
             self.mapViewBottomConstraint.priority = 750+1
         } else {
             self.deleteViewTopConstraint.constant = 0

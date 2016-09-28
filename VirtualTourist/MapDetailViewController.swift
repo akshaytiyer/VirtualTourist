@@ -33,6 +33,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         noPhotosLabel.hidden = true
         collectionView.delegate = self
+        collectionView.dataSource = self
         if FlickrPhotoDelegate.sharedInstance().isLoading(annotation.location!) {
             self.shouldFetch = true
             self.updateToolBar(false)

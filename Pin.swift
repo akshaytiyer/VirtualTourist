@@ -35,7 +35,7 @@ public class Pin : NSManagedObject {
     }
     
     convenience init(lattitude:NSNumber, longitude:NSNumber, context:NSManagedObjectContext) {
-        self.init(context: context)
+        self.init(initWithContext: context)
         
         self.lattitude = lattitude
         self.longitude = longitude

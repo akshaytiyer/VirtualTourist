@@ -61,6 +61,6 @@ class ImageCache {
         let documentsDirectoryURL:NSURL = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).first!
         let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(identifier)
         
-        return fullURL.path!
+        return fullURL!.path!
     }
 }

@@ -1,21 +1,11 @@
 //
 //  CoreDataStackManager.swift
-//  FavoriteActors
+//  VirtualTourist
 //
-//  Created by Jason on 3/10/15.
-//  Copyright (c) 2015 Udacity. All rights reserved.
+//  Created by Akshay Iyer on 9/27/16.
+//  Copyright © 2016 akshaytiyer. All rights reserved.
 //
 
-import Foundation
-import CoreData
-
-/**
-* The CoreDataStackManager contains the code that was previously living in the
-* AppDelegate in Lesson 3. Apple puts the code in the AppDelegate in many of their
-* Xcode templates. But they put it in a convenience class like this in sample code
-* like the "Earthquakes" project.
-*
-*/
 
 import Foundation
 import CoreData

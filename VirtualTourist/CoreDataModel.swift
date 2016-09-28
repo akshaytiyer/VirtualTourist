@@ -19,7 +19,7 @@ public struct CoreDataModel: CustomStringConvertible {
     
     public var storeURL: NSURL {
         get {
-            return storeDirectoryURL.URLByAppendingPathComponent(databaseFileName)
+            return storeDirectoryURL.URLByAppendingPathComponent(databaseFileName)!
         }
     }
     

@@ -41,6 +41,7 @@ class PhotoCollectionViewCell: UICollectionViewCell, ImageLoadDelegate {
     }
     
     func configureCellWithPhoto() {
+        
         self.imageView.image = image.internalimage
         self.placeHolderView.hidden = true
         self.imageView.hidden = false

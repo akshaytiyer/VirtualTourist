@@ -22,7 +22,7 @@ public class PinDetail: NSManagedObject {
     }
     
     convenience init(location:Pin, locality:String, context:NSManagedObjectContext) {
-        self.init(context: context)
+        self.init(initWithContext: context)
         
         self.locality = locality
         self.location = location
