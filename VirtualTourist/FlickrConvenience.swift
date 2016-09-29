@@ -24,7 +24,7 @@ extension FlickrClient {
                         break
                     }
                     let imageUrlString = nextPhoto["url_m"] as? String
-                    
+                    print(imageUrlString)
                     if let imageURL = NSURL(string: imageUrlString!) {
                         urls.append(imageURL)
                     }

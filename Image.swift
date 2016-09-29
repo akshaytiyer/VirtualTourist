@@ -14,7 +14,7 @@ import CoreData
 
 public class Image : NSManagedObject {
     
-    @NSManaged public var image:String
+    @NSManaged public var image: NSData
     @NSManaged public var flickrURL:NSURL
     @NSManaged public var pin: Pin?
     
@@ -33,11 +33,9 @@ public class Image : NSManagedObject {
         let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         self.flickrURL = imageURL
-        self.image = self.flickrURL.lastPathComponent!
+        let imageStored = UIImage(data: NSData(contentsOfURL: imageURL)!)
+        self.image = UIImagePNGRepresentation(imageStored!)!
         self.pin = location
-        if self.internalimage == nil {
-            _ = PhotoDownloadWorker(image: self)
-        }
     }
     
     public override func prepareForDeletion() {

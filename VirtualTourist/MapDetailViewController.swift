@@ -145,7 +145,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         for photo in self.annotation.location!.images {
             photo.pin = nil
             //clean images from disk
-            photo.internalimage = nil
+            //photo.internalimage = nil
             self.sharedContext.deleteObject(photo)
         }
             self.searchPhotosForLocation()
@@ -154,13 +154,13 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     }
     
     func searchPhotosForLocation() {
+        print(self.annotation.location!)
         FlickrPhotoDelegate.sharedInstance().searchPhotos(self.annotation.location!)
         self.collectionView.hidden = true
-        self.newCollectionButton.enabled = false;
+        self.newCollectionButton.enabled = true;
         self.view.layoutIfNeeded()
         self.updateToolBar(false)
         FlickrPhotoDelegate.sharedInstance().addDelegate(annotation.location!, delegate: self)
-        
     }
     
     //MARK: - Image Load Delegate
@@ -180,7 +180,6 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     
     func configureCell(cell: PhotoCollectionViewCell, atIndexPath indexPath:NSIndexPath) {
         let image = self.fetchedResultsViewController.objectAtIndexPath(indexPath) as! Image
-        
         cell.image = image
     }
     
@@ -231,7 +230,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         let sectionInfo = self.fetchedResultsViewController.sections![section]
         if let photos = self.annotation!.location?.images where photos.count == 0 && self.isViewLoaded() && self.view.window != nil && self.newCollectionButton.enabled && !FlickrPhotoDelegate.sharedInstance().isLoading(annotation.location!) {
             noPhotosLabel.hidden = false
-            collectionView.hidden = true
+            collectionView.hidden = false
             dispatch_async(dispatch_get_main_queue()) {
                 self.searchPhotosForLocation()
             }

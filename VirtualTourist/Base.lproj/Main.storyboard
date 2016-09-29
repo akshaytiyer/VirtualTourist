@@ -96,7 +96,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p1R-rN-ABq">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="p1R-rN-ABq">
+                                <frame key="frameInset" width="1000" height="1000"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="98" id="5Vc-xB-Ams"/>
                                 </constraints>
@@ -118,24 +119,31 @@
                                             <subviews>
                                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="MTs-qE-Bwf"/>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yfb-ug-uf8">
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Placeholder Image" translatesAutoresizingMaskIntoConstraints="NO" id="j9W-Ge-NTQ"/>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="j9W-Ge-NTQ" secondAttribute="bottom" id="REP-LI-TaY"/>
+                                                        <constraint firstAttribute="trailing" secondItem="j9W-Ge-NTQ" secondAttribute="trailing" id="V6r-WX-MMO"/>
+                                                        <constraint firstItem="j9W-Ge-NTQ" firstAttribute="leading" secondItem="yfb-ug-uf8" secondAttribute="leading" id="YDO-j6-s5g"/>
+                                                        <constraint firstItem="j9W-Ge-NTQ" firstAttribute="top" secondItem="yfb-ug-uf8" secondAttribute="top" id="ajf-Ch-6ce"/>
+                                                    </constraints>
                                                 </view>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rco-DK-PD6"/>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="rco-DK-PD6" firstAttribute="bottom" secondItem="yfb-ug-uf8" secondAttribute="bottom" id="0jU-6m-r4e"/>
                                             <constraint firstItem="yfb-ug-uf8" firstAttribute="top" secondItem="EWz-Tm-AoJ" secondAttribute="top" id="0u3-JM-b44"/>
                                             <constraint firstItem="rco-DK-PD6" firstAttribute="top" secondItem="yfb-ug-uf8" secondAttribute="top" id="3jJ-pD-Nnb"/>
-                                            <constraint firstItem="MTs-qE-Bwf" firstAttribute="top" secondItem="EWz-Tm-AoJ" secondAttribute="top" id="5hK-oN-fkc"/>
                                             <constraint firstAttribute="bottom" secondItem="yfb-ug-uf8" secondAttribute="bottom" id="FNX-uk-fRX"/>
-                                            <constraint firstAttribute="bottom" secondItem="MTs-qE-Bwf" secondAttribute="bottom" id="Lhk-Q1-e2k"/>
                                             <constraint firstAttribute="trailing" secondItem="MTs-qE-Bwf" secondAttribute="trailing" id="RHU-aO-9eu"/>
                                             <constraint firstItem="yfb-ug-uf8" firstAttribute="leading" secondItem="EWz-Tm-AoJ" secondAttribute="leading" id="UTA-vv-IXU"/>
+                                            <constraint firstAttribute="bottom" secondItem="MTs-qE-Bwf" secondAttribute="bottom" constant="62" id="Wvx-e5-aj0"/>
                                             <constraint firstAttribute="trailing" secondItem="yfb-ug-uf8" secondAttribute="trailing" id="YCm-sE-mFk"/>
                                             <constraint firstItem="MTs-qE-Bwf" firstAttribute="leading" secondItem="EWz-Tm-AoJ" secondAttribute="leading" id="cy0-04-BrP"/>
                                             <constraint firstItem="rco-DK-PD6" firstAttribute="trailing" secondItem="yfb-ug-uf8" secondAttribute="trailing" id="kEY-uA-e7B"/>
+                                            <constraint firstItem="MTs-qE-Bwf" firstAttribute="top" secondItem="EWz-Tm-AoJ" secondAttribute="top" constant="61" id="rGu-Ok-WRM"/>
                                             <constraint firstItem="rco-DK-PD6" firstAttribute="leading" secondItem="MTs-qE-Bwf" secondAttribute="leading" id="utX-aB-gcf"/>
                                         </constraints>
                                         <connections>
@@ -193,4 +201,7 @@
             <point key="canvasLocation" x="1084" y="57"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Placeholder Image" width="90" height="90"/>
+    </resources>
 </document>

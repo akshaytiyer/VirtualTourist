@@ -157,6 +157,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, NSFetche
         if segue.identifier == "DetailView" {
             if let viewController = segue.destinationViewController as? MapDetailViewController {
                 viewController.annotation = self.selectedPin
+                mapView.deselectAnnotation(viewController.annotation, animated: false)
             }
         }
     }

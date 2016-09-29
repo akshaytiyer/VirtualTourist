@@ -18,16 +18,7 @@ class PhotoCollectionViewCell: UICollectionViewCell, ImageLoadDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if self.image.internalimage == nil {
-            if let downloadWorker = PendingPhotoDownloads.sharedInstance().downloadsInProgress[self.image.description.hashValue] as? PhotoDownloadWorker {
-                downloadWorker.imageLoadDelegate.append(self)
-                self.configureLoadingCell()
-            } else {
-                self.configureCellWithPhoto()
-            }
-        } else {
-            self.configureCellWithPhoto()
-        }
+        self.configureCellWithPhoto()
         self.placeHolderView.layer.cornerRadius = 3.0
         self.progressView.layer.cornerRadius = 3.0
     }
@@ -42,8 +33,8 @@ class PhotoCollectionViewCell: UICollectionViewCell, ImageLoadDelegate {
     
     func configureCellWithPhoto() {
         
-        self.imageView.image = image.internalimage
-        self.placeHolderView.hidden = true
+        self.imageView.image = UIImage(data: image.image)
+        self.placeHolderView.hidden = false
         self.imageView.hidden = false
     }
     
