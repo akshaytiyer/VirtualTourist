@@ -32,7 +32,7 @@ public final class CoreDataStack:CustomStringConvertible {
         self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
     }
     
-    public func childManagedObjectContext(concurrencyType:NSManagedObjectContextConcurrencyType = .MainQueueConcurrencyType, mergePolicyType:NSMergePolicyType = .MergeByPropertyObjectTrumpMergePolicyType) -> ChildManagedObjectContext {
+    public func childManagedObjectContext(concurrencyType:NSManagedObjectContextConcurrencyType, mergePolicyType:NSMergePolicyType = .MergeByPropertyObjectTrumpMergePolicyType) -> ChildManagedObjectContext {
         
         let childContext = NSManagedObjectContext(concurrencyType: concurrencyType)
         childContext.parentContext = managedObjectContext

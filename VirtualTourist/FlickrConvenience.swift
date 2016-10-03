@@ -11,6 +11,7 @@ import CoreData
 
 private let MAX_PHOTOS = 39
 
+
 extension FlickrClient {
     
     public func getPhototosFromFlickerSearch(annotation:Pin, delegate:FlickrDelegate?) {
@@ -32,12 +33,12 @@ extension FlickrClient {
                 
                 if let pinLocation = self.sharedModelContext.objectWithID(annotation.objectID) as? Pin {
                     _ = urls.map({ Image(location: pinLocation, imageURL: $0, context: self.sharedModelContext)})
-                    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FlickrClient.mergeChanges(_:)), name: NSManagedObjectContextDidSaveNotification, object: self.sharedModelContext)
+                   NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FlickrClient.mergeChanges(_:)), name: NSManagedObjectContextDidSaveNotification, object: self.sharedModelContext)
                     saveContext(self.sharedModelContext) { success in
                         dispatch_async(dispatch_get_main_queue()) {
-                            delegate?.didSearchLocationImages(true, location: annotation, photos: photos, errorString: nil)
+                                delegate?.didSearchLocationImages(true, location: annotation, photos: photos, errorString: nil)
                         }
-                    }
+                        }
                 }
                 
             } else {
@@ -45,7 +46,6 @@ extension FlickrClient {
             }
         }
     }
-    
     public func mergeChanges(notification:NSNotification) {
         let mainContext:NSManagedObjectContext = CoreDataStackManager.sharedInstance().dataStack.managedObjectContext
         dispatch_async(dispatch_get_main_queue()) {
@@ -133,5 +133,23 @@ extension FlickrClient {
         let top_right_lat = min(latitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MAX)
         
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
+    }
+    
+    func downloadImage(let imagePath:String, completionHandler: (imageData: NSData?, errorString: String?) -> Void){
+        let session = NSURLSession.sharedSession()
+        let imgURL = NSURL(string: imagePath)
+        let request: NSURLRequest = NSURLRequest(URL: imgURL!)
+        
+        let task = session.dataTaskWithRequest(request) {data, response, downloadError in
+            
+            if downloadError != nil {
+                completionHandler(imageData: nil, errorString: "Could not download image \(imagePath)")
+            } else {
+                
+                completionHandler(imageData: data, errorString: nil)
+            }
+        }
+        
+        task.resume()
     }
 }

@@ -36,7 +36,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         if FlickrPhotoDelegate.sharedInstance().isLoading(annotation.location!) {
             self.shouldFetch = true
-            self.updateToolBar(false)
+            self.updateToolBar(true)
             FlickrPhotoDelegate.sharedInstance().addDelegate(annotation.location!, delegate: self)
         } else {
             self.performFetch()
@@ -47,7 +47,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
                     }
                 }
             } else {
-                self.updateToolBar(annotation.location!.images.count > 0)
+                self.updateToolBar(true)
             }
             
         }
@@ -127,6 +127,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
             
             self.collectionView.reloadData()
             self.collectionView.layoutIfNeeded()
+            self.updateToolBar(true)
             self.view.layoutIfNeeded()
             if (photos?.count > 0) {
                 UIView.animateWithDuration(1.0, animations: {
@@ -159,7 +160,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         self.collectionView.hidden = true
         self.newCollectionButton.enabled = true;
         self.view.layoutIfNeeded()
-        self.updateToolBar(false)
+        self.updateToolBar(true)
         FlickrPhotoDelegate.sharedInstance().addDelegate(annotation.location!, delegate: self)
     }
     
@@ -172,7 +173,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     func didFinishLoad() {
         let downloading = self.annotation.location!.isDownloading()
         dispatch_async(dispatch_get_main_queue()) {
-            self.updateToolBar(!downloading)
+            self.updateToolBar(true)
         }
     }
     
@@ -241,9 +242,11 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoColelctionViewCell", forIndexPath: indexPath) as! PhotoCollectionViewCell
-        
-        self.configureCell(cell, atIndexPath: indexPath)
-        
+        let image = fetchedResultsViewController.objectAtIndexPath(indexPath) as? Image
+        FlickrClient.sharedInstance().downloadImage((image?.flickrURL)!) { (imageData, errorString) in
+            cell.imageView.image = UIImage(data: imageData!)
+        }
+        //self.configureCell(cell, atIndexPath: indexPath)
         return cell
     }
     
@@ -255,7 +258,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         } else {
             selectedIndexes.append(indexPath)
         }
-        self.configureCell(cell, atIndexPath: indexPath)
+        //self.configureCell(cell, atIndexPath: indexPath)
     }
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {

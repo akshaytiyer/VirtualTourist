@@ -19,11 +19,6 @@ public class PhotoDownloadWorker:NSOperation, NSURLSessionDataDelegate {
     var image:Image
     var session:NSURLSession!
     
-    public override var hashValue: Int {
-        get {
-            return self.image.flickrURL.path!.hashValue
-        }
-    }
     
     init(image:Image) {
         self.image = image
@@ -87,7 +82,7 @@ public class PhotoDownloadWorker:NSOperation, NSURLSessionDataDelegate {
     }
     
     private func download() {
-        let request = NSURLRequest(URL: self.image.flickrURL)
+        let request = NSURLRequest(URL: NSURL(fileURLWithPath: self.image.flickrURL))
         let dataTask = self.session.dataTaskWithRequest(request)
         
         dataTask.resume()
@@ -123,7 +118,6 @@ public class PhotoDownloadWorker:NSOperation, NSURLSessionDataDelegate {
         }
         if let imageData = self.imageData {
             let image = UIImage(data: imageData)
-            self.image.internalimage = image
         }
         self.fireLoadFinish()
         self.imageLoadDelegate.removeAll(keepCapacity: false)
@@ -135,5 +129,5 @@ public class PhotoDownloadWorker:NSOperation, NSURLSessionDataDelegate {
 }
 
 public func ==(lhs:PhotoDownloadWorker, rhs:PhotoDownloadWorker) -> Bool {
-    return lhs.image.flickrURL.path! == rhs.image.flickrURL.path!
+    return lhs.image.flickrURL == rhs.image.flickrURL
 }
