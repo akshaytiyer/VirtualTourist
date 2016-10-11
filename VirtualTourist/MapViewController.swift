@@ -97,7 +97,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, NSFetche
             let location = Pin(lattitude: coordinate.latitude, longitude: coordinate.longitude, context: self.sharedContext)
             CoreDataStackManager.sharedInstance().saveContext()
             self.currentAnnotation!.location = location
-            //FlickrPhotoDelegate.sharedInstance().searchPhotos(location)
+            FlickrPhotoDelegate.sharedInstance().searchPhotos(location)
             let clocation = CLLocation(latitude: self.currentAnnotation!.coordinate.latitude, longitude: self.currentAnnotation!.coordinate.longitude)
             CLGeocoder().reverseGeocodeLocation(clocation) { placemarks, error in
                 if error != nil {

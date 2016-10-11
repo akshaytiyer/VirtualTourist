@@ -33,8 +33,8 @@ public class Image : NSManagedObject {
         let entity = NSEntityDescription.entityForName(name, inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         self.flickrURL = imageURL.absoluteString
-        let imageStored = UIImage(data: NSData(contentsOfURL: imageURL)!)
-        self.image = UIImagePNGRepresentation(imageStored!)!
+        //let imageStored = UIImage(data: NSData(contentsOfURL: imageURL)!)
+        //self.image = UIImagePNGRepresentation(imageStored!)!
         self.pin = location
     }
 }

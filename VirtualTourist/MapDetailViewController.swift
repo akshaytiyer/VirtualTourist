@@ -36,7 +36,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         if FlickrPhotoDelegate.sharedInstance().isLoading(annotation.location!) {
             self.shouldFetch = true
-            self.updateToolBar(true)
+            self.updateToolBar(false)
             FlickrPhotoDelegate.sharedInstance().addDelegate(annotation.location!, delegate: self)
         } else {
             self.performFetch()
@@ -90,12 +90,9 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         
         let point = recognizer.locationInView(self.collectionView)
         if let indexPath = self.collectionView.indexPathForItemAtPoint(point) {
-            if let cell = self.collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCollectionViewCell {
-                let image = cell.image
-                image.pin = nil
-                self.sharedContext.deleteObject(image)
+            let photo = self.fetchedResultsViewController.objectAtIndexPath(indexPath) as! Image
+                self.sharedContext.deleteObject(photo)
                 CoreDataStackManager.sharedInstance().saveContext()
-            }
         }
     }
     
@@ -160,7 +157,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
         self.collectionView.hidden = true
         self.newCollectionButton.enabled = true;
         self.view.layoutIfNeeded()
-        self.updateToolBar(true)
+        self.updateToolBar(false)
         FlickrPhotoDelegate.sharedInstance().addDelegate(annotation.location!, delegate: self)
     }
     
@@ -242,9 +239,11 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoColelctionViewCell", forIndexPath: indexPath) as! PhotoCollectionViewCell
-        let image = fetchedResultsViewController.objectAtIndexPath(indexPath) as? Image
-        FlickrClient.sharedInstance().downloadImage((image?.flickrURL)!) { (imageData, errorString) in
-            cell.imageView.image = UIImage(data: imageData!)
+        let image = fetchedResultsViewController.objectAtIndexPath(indexPath) as! Image
+        FlickrClient.sharedInstance().downloadImage(image.flickrURL) { (imageData, errorString) in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                cell.imageView.image = UIImage(data: imageData!)
+            })
         }
         //self.configureCell(cell, atIndexPath: indexPath)
         return cell

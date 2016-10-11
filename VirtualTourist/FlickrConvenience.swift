@@ -31,6 +31,19 @@ extension FlickrClient {
                     }
                 }
                 
+           /* self.sharedModelContext.performBlockAndWait {
+                for url in urls {
+                        let _ = Image(location: (self.sharedModelContext.objectWithID(annotation.objectID) as? Pin)!, imageURL: url, context: self.sharedModelContext)
+                        //photo.pin = annotation
+                        saveContext(self.sharedModelContext)
+                        CoreDataStackManager.sharedInstance().saveContext()
+                    }
+                } */
+
+                
+                //print(annotation.objectID)
+                //CoreDataStackManager.sharedInstance().saveContext()
+                print(self.sharedModelContext.objectWithID(annotation.objectID))
                 if let pinLocation = self.sharedModelContext.objectWithID(annotation.objectID) as? Pin {
                     _ = urls.map({ Image(location: pinLocation, imageURL: $0, context: self.sharedModelContext)})
                    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FlickrClient.mergeChanges(_:)), name: NSManagedObjectContextDidSaveNotification, object: self.sharedModelContext)
@@ -103,6 +116,7 @@ extension FlickrClient {
                     if totalPhotosVal > 0 {
                         if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
                             if photosArray.count > 0 {
+                                print(photosArray.count)
                                 completionHandler(success: true, result: photosArray, errorString: nil)
                             } else {
                                 completionHandler(success: false, result: nil, errorString: "Images does not exist for this location")

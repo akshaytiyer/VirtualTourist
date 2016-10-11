@@ -1,4 +1,4 @@
-//
+ //
 //  PhotoCollectionViewCell.swift
 //  VirtualTourist
 //
@@ -33,7 +33,7 @@ class PhotoCollectionViewCell: UICollectionViewCell, ImageLoadDelegate {
     
     func configureCellWithPhoto() {
         
-        self.imageView.image = UIImage(data: image.image)
+        //self.imageView.image = UIImage(data: image.image)
         self.placeHolderView.hidden = false
         self.imageView.hidden = false
     }
