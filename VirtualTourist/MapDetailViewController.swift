@@ -25,7 +25,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     var updatedIndexPaths: [NSIndexPath]!
     
     var shouldFetch:Bool = false
-    var recognizer:UILongPressGestureRecognizer!
+    var recognizer:UITapGestureRecognizer!
     
     //MARK: - Lifecycle
     
@@ -56,7 +56,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
             self.navigationItem.title = details.locality
         }
         
-        self.recognizer = UILongPressGestureRecognizer(target: self, action: #selector(MapDetailViewController.handleLongPress(_:)))
+        self.recognizer = UITapGestureRecognizer(target: self, action: #selector(MapDetailViewController.handleLongPress(_:)))
         self.collectionView.addGestureRecognizer(self.recognizer)
     }
     
@@ -83,7 +83,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     
     //MARK: - Controller
     
-    func handleLongPress(recognizer:UILongPressGestureRecognizer) {
+    func handleLongPress(recognizer:UITapGestureRecognizer) {
         if (recognizer.state != UIGestureRecognizerState.Ended) {
             return
         }
@@ -154,7 +154,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     func searchPhotosForLocation() {
         print(self.annotation.location!)
         FlickrPhotoDelegate.sharedInstance().searchPhotos(self.annotation.location!)
-        self.collectionView.hidden = true
+        //self.collectionView.hidden = true
         self.newCollectionButton.enabled = true;
         self.view.layoutIfNeeded()
         self.updateToolBar(false)
@@ -168,7 +168,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     }
     
     func didFinishLoad() {
-        let downloading = self.annotation.location!.isDownloading()
+        _ = self.annotation.location!.isDownloading()
         dispatch_async(dispatch_get_main_queue()) {
             self.updateToolBar(true)
         }
@@ -239,6 +239,7 @@ class MapDetailViewController : UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoColelctionViewCell", forIndexPath: indexPath) as! PhotoCollectionViewCell
+        cell.imageView.image =  UIImage(named: "Placeholder Image")
         let image = fetchedResultsViewController.objectAtIndexPath(indexPath) as! Image
         FlickrClient.sharedInstance().downloadImage(image.flickrURL) { (imageData, errorString) in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
